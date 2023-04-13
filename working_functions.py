@@ -83,7 +83,7 @@ def find_all_solutions(k: int, n: int, cond: int) -> list:
     
     i = n
     
-    while i > 0:
+    while i >= m.floor(n/k)-cond:
 
         arr = []
         
@@ -103,20 +103,8 @@ def find_all_solutions(k: int, n: int, cond: int) -> list:
             
             for sol in solutions[n-i-1]:
                 
-                for s in sol.add_next_solutions(n-i):
-                    
-                    if s not in arr:
-                        
-                        
-                        
-                        if sum(s.solution) == n:
-                            
-                            arr.append(s)
-                            
-                        else:
-                            
-                            i = 0
-                            
+                sol.add_next_solutions(n, arr)
+                
         solutions.append(arr)
             
         i -= 1

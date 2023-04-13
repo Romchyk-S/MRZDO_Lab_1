@@ -31,38 +31,26 @@ class Solution:
         
         return False
     
-    def add_next_solutions(self, num: int) -> list:
-        
-        arr = []
+    def add_next_solutions(self, n: int, arr: list) -> None:
         
         temp_sol = [x-1 if x == max(self.solution) else x for x in self.solution]
         
-        count = 0
+        if sum(temp_sol) == n-1:
         
-        while count < len(temp_sol)-1:
+            count = 0
             
-            temp_sol_1 = temp_sol.copy()
-        
-            i = 0
-            
-            while i < len(temp_sol_1):
+            while count < len(temp_sol):
                 
-                if temp_sol_1[i] != max(temp_sol_1) and i > count:
-                    
-                    temp_sol_1[i] += 1
-                    
-                    break
+                temp_sol_1 = temp_sol.copy()
                 
-                elif temp_sol_1[i] != max(temp_sol_1) and i == 0 and len(arr) != 0:
+                if temp_sol_1[count] != max(temp_sol_1):
                     
-                    temp_sol_1[i] += 1
+                    temp_sol_1[count] += 1
                     
-                    break
+                    new_sol = Solution(temp_sol_1)
                     
-                i += 1
-            
-            arr.append(Solution(temp_sol_1))
-                
-            count += 1
-            
-        return arr
+                    if new_sol not in arr:
+                    
+                        arr.append(new_sol)
+                    
+                count += 1
