@@ -1,5 +1,7 @@
 import math as m
 
+import time as tm
+
 import solution_class as sc
 
 def get_user_input() -> tuple[int]:
@@ -65,23 +67,27 @@ def form_equation_output(k: int, n: int, var: str) -> str:
         
         return equation
 
-def count_solutions_amount(k: int, n: int, cond: int) -> None:
+def count_solutions_amount(k: int, n: int, cond: int) -> int:
     
     try:
         
         solutions_amount = int(m.factorial(n+k-1) / (m.factorial(n) * (m.factorial(k-1))))
 
-        print(f"За формулою кількість розв'язків для x>={cond}: {solutions_amount}")
+        return solutions_amount
 
     except ValueError:
         
         print("У факторіалі від'ємне число, задане обмеження виключає можливість наявности розв'язків.")
 
-def find_all_solutions(k: int, n: int, cond: int) -> list:
+        return 0
+
+def find_all_solutions(k: int, n: int, cond: int) -> tuple[list, float]:
     
     solutions = []
     
     i = n
+    
+    start = tm.perf_counter()
     
     while i >= m.floor(n/k)-cond:
 
@@ -95,7 +101,9 @@ def find_all_solutions(k: int, n: int, cond: int) -> list:
                 
                 new_solution = sc.Solution([0 if x != j else i for x in range(k)])
                 
-                arr.append(new_solution)
+                if new_solution not in arr:
+                
+                    arr.append(new_solution)
                 
                 j += 1
         
@@ -103,13 +111,15 @@ def find_all_solutions(k: int, n: int, cond: int) -> list:
             
             for sol in solutions[n-i-1]:
                 
-                sol.add_next_solutions(n, arr)
+                sol.add_next_solutions(n, arr, solutions)
                 
         solutions.append(arr)
             
         i -= 1
         
-    return solutions
+    time_taken = tm.perf_counter()-start
+        
+    return solutions, time_taken
 
 def apply_condition(cond: int, result: list) -> list:
     
